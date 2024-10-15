@@ -23,6 +23,7 @@ const App = () => {
         <Route path="*" element={ <Navigate to="/" /> } />
       </Routes>
     </BrowserRouter>
+    
   );
 };
 
