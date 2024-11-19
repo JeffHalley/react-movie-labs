@@ -1,3 +1,6 @@
+import React, { useState, useEffect } from "react";
+import { useQuery } from "react-query";  
+import { getRecommendations } from "../../api/tmdb-api";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -6,13 +9,11 @@ import StarRate from "@mui/icons-material/StarRate";
 import NavigationIcon from "@mui/icons-material/Navigation";
 import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
-import React, { useState, useEffect } from "react";
+import Grid from "@mui/material/Grid";
 import Drawer from "@mui/material/Drawer";
 import MovieReviews from "../movieReviews";
-import { getRecommendations } from "../../api/tmdb-api";
 import MovieCard from "../movieCard";
 import Spinner from "../spinner";
-import Grid from "@mui/material/Grid";
 
 const root = {
   display: "flex",
@@ -26,28 +27,23 @@ const chip = { margin: 0.5 };
 
 const MovieDetails = ({ movie }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [recommendations, setRecommendations] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchRecommendations = async () => {
-      setLoading(true);
-      try {
-        const data = await getRecommendations(movie.id);
-        setRecommendations(data.results);
-        setError(null);
-      } catch (err) {
-        setError("Failed to load recommendations");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (movie?.id) {
-      fetchRecommendations();
+  // React Query's useQuery hook to cache movie recommendations
+  const { data, error, isLoading, isError } = useQuery(
+    ["recommendations", movie.id],  
+    () => getRecommendations(movie.id),  
+    {
+      enabled: !!movie?.id,  
     }
-  }, [movie]);
+  );
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (isError) {
+    return <Typography color="error">{error.message}</Typography>;
+  }
 
   return (
     <>
@@ -84,18 +80,11 @@ const MovieDetails = ({ movie }) => {
         Recommended Movies
       </Typography>
 
-      {loading ? (
-        <Spinner />
-      ) : error ? (
-        <Typography color="error">{error}</Typography>
-      ) : (
+      {data?.results && (
         <Grid container spacing={2} sx={{ marginTop: 2 }}>
-          {recommendations.map((recommendedMovie) => (
+          {data.results.map((recommendedMovie) => (
             <Grid item xs={12} sm={6} md={4} key={recommendedMovie.id}>
-              <MovieCard 
-                movie={recommendedMovie} 
-                action={() => {}} 
-              />
+              <MovieCard movie={recommendedMovie} action={() => {}} />
             </Grid>
           ))}
         </Grid>
