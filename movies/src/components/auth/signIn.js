@@ -1,74 +1,64 @@
-// SignIn.js
-import React, { useState } from 'react';
-import { Grid, TextField, Button, Typography, Paper, Alert } from '@mui/material';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebase'; // Import Firebase auth and signIn method
+import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState } from "react";
+import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
+import "./SignIn.css"; // Import the CSS file
 
 const SignIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   const signIn = (e) => {
     e.preventDefault();
+
+    // Firebase authentication logic
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
-        setError(''); // Clear error on successful sign-in
-        // Redirect to home or another page after successful sign in
+        console.log(userCredential); // You can remove this line in production
+        navigate("/"); // Navigate to the home page ("/") after successful login
       })
       .catch((error) => {
-        setError('Invalid credentials. Please try again.');
-        console.log(error);
+        console.log(error.message); // Log error message if login fails
       });
   };
 
+  const goToSignUp = () => {
+    navigate("/signup"); // Navigate to the signup page
+  };
+
   return (
-    <Grid container justifyContent="center" alignItems="center" spacing={2}>
-      <Grid item xs={12} sm={6} md={4}>
-        <Paper elevation={3} sx={{ padding: 3 }}>
-          <Typography variant="h5" align="center" gutterBottom>
-            Sign In
-          </Typography>
+    <div className="sign-in-container">
+      <form onSubmit={signIn} className="form">
+        <h1>Log In to your Account</h1>
 
-          {/* Display Error Message if any */}
-          {error && <Alert severity="error">{error}</Alert>}
+        <div className="input-group">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        
+        <div className="input-group">
+          <input
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
 
-          {/* Sign In Form */}
-          <form onSubmit={signIn}>
-            <Grid container direction="column" spacing={2}>
-              <Grid item>
-                <TextField
-                  fullWidth
-                  label="Email"
-                  variant="outlined"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  fullWidth
-                  label="Password"
-                  variant="outlined"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </Grid>
-              <Grid item>
-                <Button fullWidth variant="contained" color="primary" type="submit">
-                  Sign In
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-        </Paper>
-      </Grid>
-    </Grid>
+        <button type="submit" className="submit-btn">Log In</button>
+        
+        <div className="signup-link">
+          <button type="button" onClick={goToSignUp}>Don't have an account? Sign Up</button>
+        </div>
+      </form>
+    </div>
   );
 };
 

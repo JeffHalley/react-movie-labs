@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";  
 import { getRecommendations } from "../../api/tmdb-api";
 import Chip from "@mui/material/Chip";
@@ -8,12 +8,13 @@ import MonetizationIcon from "@mui/icons-material/MonetizationOn";
 import StarRate from "@mui/icons-material/StarRate";
 import NavigationIcon from "@mui/icons-material/Navigation";
 import Fab from "@mui/material/Fab";
-import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Drawer from "@mui/material/Drawer";
 import MovieReviews from "../movieReviews";
 import MovieCard from "../movieCard";
 import Spinner from "../spinner";
+import Typography from "@mui/material/Typography";
+
 
 const root = {
   display: "flex",
@@ -28,7 +29,6 @@ const chip = { margin: 0.5 };
 const MovieDetails = ({ movie }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  // React Query's useQuery hook to cache movie recommendations
   const { data, error, isLoading, isError } = useQuery(
     ["recommendations", movie.id],  
     () => getRecommendations(movie.id),  
@@ -42,29 +42,30 @@ const MovieDetails = ({ movie }) => {
   }
 
   if (isError) {
-    return <Typography color="error">{error.message}</Typography>;
+    return (
+      <Paper elevation={3} sx={{ padding: 2, backgroundColor: "#fce4e4", textAlign: "center" }}>
+        <Chip label="Error" color="error" />
+        <p>{error.message}</p>
+      </Paper>
+    );
   }
 
   return (
     <>
-      <Typography variant="h5" component="h3">
-        Overview
-      </Typography>
-
-      <Typography variant="h6" component="p">
-        {movie.overview}
-      </Typography>
+      <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
+        <Chip label="Overview" color="primary" sx={{ marginBottom: 1 }} />
+        <p>{movie.overview}</p>
+      </Paper>
 
       <Paper component="ul" sx={{ ...root }}>
-        <li>
-          <Chip label="Genres" sx={{ ...chip }} color="primary" />
-        </li>
+        <Chip label="Genres" sx={{ ...chip }} color="primary" />
         {movie.genres.map((g) => (
           <li key={g.name}>
             <Chip label={g.name} sx={{ ...chip }} />
           </li>
         ))}
       </Paper>
+
       <Paper component="ul" sx={{ ...root }}>
         <Chip icon={<AccessTimeIcon />} label={`${movie.runtime} min.`} />
         <Chip icon={<MonetizationIcon />} label={`${movie.revenue.toLocaleString()}`} />
@@ -76,6 +77,7 @@ const MovieDetails = ({ movie }) => {
         />
       </Paper>
 
+      {/* Reverted Recommended Movies Section */}
       <Typography variant="h5" component="h3" sx={{ marginTop: 2 }}>
         Recommended Movies
       </Typography>
