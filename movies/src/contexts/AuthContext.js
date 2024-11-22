@@ -1,30 +1,27 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
-// Create AuthContext
 const AuthContext = createContext();
 
-// AuthProvider component to wrap the app
 export const AuthProvider = ({ children }) => {
-  const [authUser, setAuthUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
-  const login = (user) => setAuthUser(user);
-  const logout = () => setAuthUser(null);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const logOut = () => signOut(auth);
 
   return (
-    <AuthContext.Provider value={{ authUser, login, logout }}>
+    <AuthContext.Provider value={{ currentUser, logOut }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook to use AuthContext
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-};
-
-// Export AuthContext (optional, if you need direct access to the context itself)
-export default { AuthContext };
+export const useAuth = () => useContext(AuthContext);
