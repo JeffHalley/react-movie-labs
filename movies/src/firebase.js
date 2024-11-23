@@ -1,4 +1,3 @@
-// Firebase code taken by following tutorial url: https://www.youtube.com/watch?v=Vv_Oi7zPPTw//
 
 
 // Import the functions you need from the SDKs you need

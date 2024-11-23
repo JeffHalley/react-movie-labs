@@ -1,70 +1,53 @@
-# Getting Started with Create React App
+# Assignment 1 - ReactJS app.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Name: Jeff Halley
 
-## Available Scripts
+## Overview.
 
-In the project directory, you can run:
+This repository contains a Movies app built with React. The app allows users to browse movies, view detailed information, and explore upcoming, popular, and now-playing movies. It integrates Firebase authentication to manage access to certain features and implements routing with protected routes for navigation.
 
-### `npm start`
+### Features.
++ User authentication with Firebase (sign-in and sign-up).
++ Protected routes to restrict access to certain pages based on user authentication.
++ Fetching and displaying movie lists with two new static endpoints (popular, now-playing) from the TMDB API.
++ fetching relevant reccomendations for movies using parameterised endpoint.
++ `react-query` for data caching.
++ Advanced styling throughout the app.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Setup requirements.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Install dependencies (only firebase is required):
 
-### `npm test`
++ npm install firebase
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+change the credentials in firebase.js with your own, which can be created by setting up a web app in firebase console
 
-### `npm run build`
+## API endpoints.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+[ List the __additional__ TMDB endpoints used, giving the description and pathname for each one.] 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
++ Popular movies - /movie/popular
++ Now-playing movies - /movie/now_playing
++ Recommended movies - /movie/:id/recommendations
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Routing.
 
-### `npm run eject`
+[ List the __new routes__ supported by your app and state the associated page.]
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
++ /signin - Displays the sign-in page.
++ /signup - Displays the sign-up page.
++ / - Displays the homepage.
++ /movies/upcoming - Displays a list of upcoming movies (protected route).
++ /movies/popular - Displays a list of popular movies (protected route).
++ /movies/now_playing - Displays a list of now-playing movies (protected route).
++ /movies/favorites - Displays the user's favorite movies (protected route).
++ /movies/:id - Displays details for a specific movie.
++ /reviews/:id - Displays reviews for a specific movie.
++ /reviews/form - Allows users to add a new review (protected route)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Independent learning (If relevant).
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Firebase code taken by following tutorial url: https://www.youtube.com/watch?v=Vv_Oi7zPPTw//
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+attempted to integrate protected routes from following url: https://dev.to/jps27cse/building-a-firebase-authentication-and-private-route-system-in-a-react-app-5203
